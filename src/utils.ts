@@ -1,0 +1,1 @@
+export const FACTOR=25000

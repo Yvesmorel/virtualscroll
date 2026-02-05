@@ -1,8 +1,22 @@
-import React from "react";
+import React, {
+  Ref,
+  RefAttributes,
+  RefObject,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { Image } from "antd";
 import { motion } from "framer-motion";
 import { Calendar, User, ArrowUpRight } from "lucide-react";
 import { GalleryProps, ItemData } from "../deifinitions";
+import { useWindowSize } from "../hooks/useWindowsSize";
+import { FACTOR } from "../utils";
+import { firstBottomBuffer, firstData } from "../data";
+import { useGridContainerH } from "../hooks/useGridContainerH";
+import { useContainerScroll } from "../hooks/useContainerScroll";
+import { useData } from "../hooks/useData";
 
 // --- Types ---
 
@@ -24,19 +38,38 @@ const cardVariants = {
   },
 };
 
-const ElegantGallery: React.FC<GalleryProps> = ({ items }) => {
+const ElegantGallery = () => {
+  const mainContaierRef = useRef<any>(undefined);
+
+  const { cardRef, gridContainerH } = useGridContainerH();
+  const { sliceIndex } = useContainerScroll(mainContaierRef, cardRef);
+
+  const { bottomBuffer, main, topBuffuer } = useData(sliceIndex);
+
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div
+      className="h-screen w-screnn bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 overflow-auto "
+      ref={mainContaierRef}
+    >
+      <div
+        className="max-w-7xl mx-auto grid-container relative my-[200px]"
+        style={{ height: `${gridContainerH}px` }}
+      >
         {/* Grid Container */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 sticky top-0"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          {items.map((item) => (
-            <GalleryCard key={item.id} item={item} />
+          {topBuffuer.map((item) => (
+            <GalleryCard key={item.id} item={item} cardRef={cardRef} />
+          ))}
+          {main.map((item) => (
+            <GalleryCard key={item.id} item={item} cardRef={cardRef} />
+          ))}
+          {bottomBuffer.map((item) => (
+            <GalleryCard key={item.id} item={item} cardRef={cardRef} />
           ))}
         </motion.div>
       </div>
@@ -45,7 +78,10 @@ const ElegantGallery: React.FC<GalleryProps> = ({ items }) => {
 };
 
 // --- Sub-Component: Individual Card ---
-const GalleryCard: React.FC<{ item: ItemData }> = ({ item }) => {
+const GalleryCard: React.FC<{
+  item: ItemData;
+  cardRef: React.RefObject<any>;
+}> = ({ item, cardRef }) => {
   // Formatage de la date
   const date = new Date(item.createdAt).toLocaleDateString("fr-FR", {
     day: "numeric",
@@ -55,8 +91,9 @@ const GalleryCard: React.FC<{ item: ItemData }> = ({ item }) => {
 
   return (
     <motion.div
+      ref={cardRef}
       whileHover={{ y: -8 }}
-      className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
+      className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col h-full element is-visible"
     >
       {/* Zone Image (Ant Design) */}
       <div className="relative h-64 bg-gray-100 overflow-hidden">
