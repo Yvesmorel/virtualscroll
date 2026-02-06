@@ -48,29 +48,34 @@ const ElegantGallery = () => {
 
   return (
     <div
-      className="h-screen w-screnn bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 overflow-auto "
+      className="h-screen w-screnn bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 overflow-auto relative "
       ref={mainContaierRef}
     >
       <div
-        className="max-w-7xl mx-auto grid-container relative my-[200px]"
+        className="max-w-7xl mx-auto grid-container mb-[200px] sticky top-0"
         style={{ height: `${gridContainerH}px` }}
       >
         {/* Grid Container */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 sticky top-0"
+          style={
+       
+              { marginTop: `${(435 + 32) * (sliceIndex)}px` }
+         
+          }
+          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[32px]  `}
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          {topBuffuer.map((item) => (
+          {/* {topBuffuer.map((item) => (
             <GalleryCard key={item.id} item={item} cardRef={cardRef} />
-          ))}
+          ))} */}
           {main.map((item) => (
             <GalleryCard key={item.id} item={item} cardRef={cardRef} />
           ))}
-          {bottomBuffer.map((item) => (
+          {/* {bottomBuffer.map((item) => (
             <GalleryCard key={item.id} item={item} cardRef={cardRef} />
-          ))}
+          ))} */}
         </motion.div>
       </div>
     </div>

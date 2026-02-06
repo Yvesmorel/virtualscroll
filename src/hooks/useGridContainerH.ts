@@ -10,7 +10,7 @@ export const useGridContainerH = () => {
 
   useEffect(() => {
     const cardH = 435;
-    setGridContainerH(FACTOR * (cardH + 104));
+    setGridContainerH(FACTOR * (cardH + 32));
   }, [width]);
 
   return { gridContainerH, cardRef };

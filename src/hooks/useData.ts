@@ -8,15 +8,18 @@ export const useData = (sliceIndex: number) => {
   const [bottomBuffer, setBottomBuffer] =
     useState<ItemData[]>(firstBottomBuffer);
 
-  useEffect(() => {
-    setTopBuffer(data.slice(Math.max(0, sliceIndex * 4 - 8), sliceIndex * 4));
-    setMain(data.slice(sliceIndex * 4, ITEM_LENGTH + sliceIndex * 4));
-    setBottomBuffer(
-      data.slice(
-        ITEM_LENGTH + sliceIndex * 4,
-        Math.min(data.length, ITEM_LENGTH + sliceIndex * 4 + 8),
-      ),
-    );
+  useLayoutEffect(() => {
+    // setTopBuffer(data.slice(Math.max(0, sliceIndex * 4 - 8), sliceIndex * 4));
+
+    
+    
+    setMain(data.slice(sliceIndex * 4, ITEM_LENGTH * 4 + sliceIndex * 4));
+    // setBottomBuffer(
+    //   data.slice(
+    //     ITEM_LENGTH + sliceIndex * 4,
+    //     Math.min(data.length, ITEM_LENGTH + sliceIndex * 4 + 8),
+    //   ),
+    // );
     // console.log(sliceIndex);
 
     // console.log(
@@ -36,6 +39,7 @@ export const useData = (sliceIndex: number) => {
     //     Math.min(data.length, ITEM_LENGTH + sliceIndex * 4 + 8),
     //   ),
     // );
+    console.log(sliceIndex);
   }, [sliceIndex]);
 
   return { topBuffuer, main, bottomBuffer };

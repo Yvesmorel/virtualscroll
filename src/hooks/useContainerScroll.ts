@@ -1,4 +1,6 @@
 import { useState, useEffect, useLayoutEffect } from "react";
+import { ItemData } from "../deifinitions";
+import { firstBottomBuffer, firstData } from "../data";
 
 export function useContainerScroll(
   mainContaierRef: React.RefObject<any>,
@@ -6,6 +8,10 @@ export function useContainerScroll(
 ) {
   const [scrollTop, setScrollTop] = useState(0);
   const [sliceIndex, setSliceIndex] = useState(0);
+  const [topBuffuer, setTopBuffer] = useState<ItemData[]>([]);
+  const [main, setMain] = useState(firstData);
+  const [bottomBuffer, setBottomBuffer] =
+    useState<ItemData[]>(firstBottomBuffer);
   useEffect(() => {
     const mainContainer = mainContaierRef.current;
 
@@ -13,11 +19,9 @@ export function useContainerScroll(
       const cardH = 435;
       // console.log(mainContainer.scrollTop);
 
-      const computeIndex = Math.floor(mainContainer.scrollTop / (cardH + 104));
+      const computeIndex = Math.floor(mainContainer.scrollTop / (cardH + 32));
 
-      // console.log(computeIndex);
-
-      if (computeIndex !== sliceIndex) setSliceIndex(computeIndex);
+      setSliceIndex(computeIndex);
     };
     mainContainer.addEventListener("scroll", handleScroll);
     return () => mainContainer.removeEventListener("scroll", handleScroll);
