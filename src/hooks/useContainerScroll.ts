@@ -1,31 +1,32 @@
 import { useState, useEffect, useLayoutEffect } from "react";
-import { ItemData } from "../deifinitions";
-import { firstBottomBuffer, firstData } from "../data";
+
+
+import { GRID_GAP } from "../utils";
+import { useWindowSize } from "./useWindowsSize";
 
 export function useContainerScroll(
   mainContaierRef: React.RefObject<any>,
-  cardRef: React.RefObject<any>,
+  cardCompH: number,
 ) {
-  const [scrollTop, setScrollTop] = useState(0);
   const [sliceIndex, setSliceIndex] = useState(0);
-  const [topBuffuer, setTopBuffer] = useState<ItemData[]>([]);
-  const [main, setMain] = useState(firstData);
-  const [bottomBuffer, setBottomBuffer] =
-    useState<ItemData[]>(firstBottomBuffer);
+
+
+
   useEffect(() => {
+    
     const mainContainer = mainContaierRef.current;
 
     const handleScroll = () => {
-      const cardH = 435;
-      // console.log(mainContainer.scrollTop);
-
-      const computeIndex = Math.floor(mainContainer.scrollTop / (cardH + 32));
+      const computeIndex = Math.floor(
+        mainContainer.scrollTop / (cardCompH + GRID_GAP),
+      );
 
       setSliceIndex(computeIndex);
     };
+
     mainContainer.addEventListener("scroll", handleScroll);
     return () => mainContainer.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [cardCompH]);
 
   return { sliceIndex };
 }

@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
-.grid-container{
-   
+.grid-container {
+/* margin: 0 auto; */
+width: 100vw;
 }
 .element {
   opacity: 0;

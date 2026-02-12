@@ -1,22 +1,17 @@
-import React, {
-  Ref,
-  RefAttributes,
-  RefObject,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { memo, useRef, useState } from "react";
 import { Image } from "antd";
 import { motion } from "framer-motion";
 import { Calendar, User, ArrowUpRight } from "lucide-react";
-import { GalleryProps, ItemData } from "../deifinitions";
-import { useWindowSize } from "../hooks/useWindowsSize";
-import { FACTOR } from "../utils";
-import { firstBottomBuffer, firstData } from "../data";
-import { useGridContainerH } from "../hooks/useGridContainerH";
+import { ItemData } from "../deifinitions";
+
+import { useGridContainer } from "../hooks/useGridContainer";
 import { useContainerScroll } from "../hooks/useContainerScroll";
 import { useData } from "../hooks/useData";
+import { FACTOR, GRID_GAP } from "../utils";
+import { DATA_LENGTH } from "../data";
+import useMainContainerItemSize, {
+  useMainContainerContent,
+} from "../hooks/useMainContainerItemContent";
 
 // --- Types ---
 
@@ -29,7 +24,7 @@ const containerVariants = {
   },
 };
 
-const cardVariants = {
+const cardVariants: any = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
@@ -40,42 +35,38 @@ const cardVariants = {
 
 const ElegantGallery = () => {
   const mainContaierRef = useRef<any>(undefined);
+  const gridContaineRef = useRef<any>(undefined);
 
-  const { cardRef, gridContainerH } = useGridContainerH();
-  const { sliceIndex } = useContainerScroll(mainContaierRef, cardRef);
-
-  const { bottomBuffer, main, topBuffuer } = useData(sliceIndex);
+  const { cardCompH, itemsByLine } = useGridContainer(gridContaineRef);
+  const { sliceIndex } = useContainerScroll(mainContaierRef, cardCompH);
+  const { windowLines } = useMainContainerContent(mainContaierRef, cardCompH);
+  const { main } = useData(sliceIndex, itemsByLine, windowLines);
 
   return (
     <div
-      className="h-screen w-screnn bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 overflow-auto relative "
+      className="h-screen w-screnn bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 overflow-auto overflow-x-hidden relative "
       ref={mainContaierRef}
     >
       <div
-        className="max-w-7xl mx-auto grid-container mb-[200px] sticky top-0"
-        style={{ height: `${gridContainerH}px` }}
+        className="absolute top-[32px] left-0 flex flex-col w-full "
+        style={{
+          height: `${(DATA_LENGTH / itemsByLine) * (cardCompH + GRID_GAP)}px`,
+        }}
       >
         {/* Grid Container */}
         <motion.div
-          style={
-       
-              { marginTop: `${(435 + 32) * (sliceIndex)}px` }
-         
-          }
-          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[32px]  `}
+          style={{
+            marginTop: `${(cardCompH + GRID_GAP) * Math.max(sliceIndex - itemsByLine, 0)}px`,
+          }}
+          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[32px] mx-auto h-auto pb-10`}
           variants={containerVariants}
           initial="hidden"
           animate="visible"
+          ref={gridContaineRef}
         >
-          {/* {topBuffuer.map((item) => (
-            <GalleryCard key={item.id} item={item} cardRef={cardRef} />
-          ))} */}
-          {main.map((item) => (
-            <GalleryCard key={item.id} item={item} cardRef={cardRef} />
+          {main.map((item, i) => (
+            <GalleryCard key={item.id} item={item} />
           ))}
-          {/* {bottomBuffer.map((item) => (
-            <GalleryCard key={item.id} item={item} cardRef={cardRef} />
-          ))} */}
         </motion.div>
       </div>
     </div>
@@ -85,8 +76,7 @@ const ElegantGallery = () => {
 // --- Sub-Component: Individual Card ---
 const GalleryCard: React.FC<{
   item: ItemData;
-  cardRef: React.RefObject<any>;
-}> = ({ item, cardRef }) => {
+}> = ({ item }) => {
   // Formatage de la date
   const date = new Date(item.createdAt).toLocaleDateString("fr-FR", {
     day: "numeric",
@@ -96,7 +86,7 @@ const GalleryCard: React.FC<{
 
   return (
     <motion.div
-      ref={cardRef}
+      // variants={cardVariants}
       whileHover={{ y: -8 }}
       className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col h-full element is-visible"
     >
@@ -165,4 +155,4 @@ const GalleryCard: React.FC<{
   );
 };
 
-export default ElegantGallery;
+export default memo(ElegantGallery);

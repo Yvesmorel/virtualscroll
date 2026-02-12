@@ -1,46 +1,31 @@
-import { useEffect, useLayoutEffect, useState } from "react";
-import { ItemData } from "../deifinitions";
-import { data, firstBottomBuffer, firstData, ITEM_LENGTH } from "../data";
+import { useLayoutEffect, useState } from "react";
 
-export const useData = (sliceIndex: number) => {
-  const [topBuffuer, setTopBuffer] = useState<ItemData[]>([]);
+import { BUFFER_SIZE, data, firstData} from "../data";
+import { useWindowSize } from "./useWindowsSize";
+
+const TOP_BUFFER_SIZE = BUFFER_SIZE;
+const BOTTOM_BUFFER_SIZE = BUFFER_SIZE;
+
+export const useData = (
+  sliceIndex: number,
+  itemsByLine: number,
+  windowLines: number,
+) => {
   const [main, setMain] = useState(firstData);
-  const [bottomBuffer, setBottomBuffer] =
-    useState<ItemData[]>(firstBottomBuffer);
+
 
   useLayoutEffect(() => {
-    // setTopBuffer(data.slice(Math.max(0, sliceIndex * 4 - 8), sliceIndex * 4));
+    setMain(
+      data.slice(
+        Math.max(sliceIndex - TOP_BUFFER_SIZE, 0) * itemsByLine,
+        Math.min(
+          data.length,
+          (windowLines + BOTTOM_BUFFER_SIZE) * itemsByLine +
+            sliceIndex * itemsByLine,
+        ),
+      ),
+    );
+  }, [sliceIndex, itemsByLine, windowLines]);
 
-    
-    
-    setMain(data.slice(sliceIndex * 4, ITEM_LENGTH * 4 + sliceIndex * 4));
-    // setBottomBuffer(
-    //   data.slice(
-    //     ITEM_LENGTH + sliceIndex * 4,
-    //     Math.min(data.length, ITEM_LENGTH + sliceIndex * 4 + 8),
-    //   ),
-    // );
-    // console.log(sliceIndex);
-
-    // console.log(
-    //   "TOP",
-    //   data.slice(Math.max(0, sliceIndex * 4 - 8), sliceIndex * 4),
-    // );
-
-    // console.log(
-    //   "MAIN",
-    //   data.slice(sliceIndex * 4, ITEM_LENGTH + sliceIndex * 4),
-    // );
-
-    // console.log(
-    //   "BOTTOM",
-    //   data.slice(
-    //     ITEM_LENGTH + sliceIndex * 4,
-    //     Math.min(data.length, ITEM_LENGTH + sliceIndex * 4 + 8),
-    //   ),
-    // );
-    console.log(sliceIndex);
-  }, [sliceIndex]);
-
-  return { topBuffuer, main, bottomBuffer };
+  return { main };
 };
