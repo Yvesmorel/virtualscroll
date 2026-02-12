@@ -3,7 +3,7 @@ import json from "./items_100000.json";
 export const ITEM_LENGTH = 8;
 const data = json as ItemData[];
 
-const firstData = data.slice(0, ITEM_LENGTH * 4);
+const firstData = data.slice(0, 4);
 
 const DATA_LENGTH = data.length;
 

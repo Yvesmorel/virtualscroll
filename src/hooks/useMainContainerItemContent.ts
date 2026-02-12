@@ -12,7 +12,7 @@ export function useMainContainerContent(
     if (cardCompH === 0) return;
 
     const windowContent = Math.ceil(
-      mainContaierRef.current.clientHeight / cardCompH,
+      mainContaierRef.current.clientHeight / cardCompH
     );
 
     if (windowContent !== windowLines) setWindowLine(windowContent);

@@ -1,6 +1,5 @@
 import { useState, useEffect, useLayoutEffect } from "react";
 
-
 import { GRID_GAP } from "../utils";
 import { useWindowSize } from "./useWindowsSize";
 
@@ -10,10 +9,7 @@ export function useContainerScroll(
 ) {
   const [sliceIndex, setSliceIndex] = useState(0);
 
-
-
   useEffect(() => {
-    
     const mainContainer = mainContaierRef.current;
 
     const handleScroll = () => {
@@ -21,9 +17,11 @@ export function useContainerScroll(
         mainContainer.scrollTop / (cardCompH + GRID_GAP),
       );
 
+      console.log("POSITION_____",computeIndex,);
+      
       setSliceIndex(computeIndex);
     };
-
+     
     mainContainer.addEventListener("scroll", handleScroll);
     return () => mainContainer.removeEventListener("scroll", handleScroll);
   }, [cardCompH]);

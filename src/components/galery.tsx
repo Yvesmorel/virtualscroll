@@ -8,7 +8,7 @@ import { useGridContainer } from "../hooks/useGridContainer";
 import { useContainerScroll } from "../hooks/useContainerScroll";
 import { useData } from "../hooks/useData";
 import { FACTOR, GRID_GAP } from "../utils";
-import { DATA_LENGTH } from "../data";
+import { BUFFER_SIZE, DATA_LENGTH } from "../data";
 import useMainContainerItemSize, {
   useMainContainerContent,
 } from "../hooks/useMainContainerItemContent";
@@ -48,7 +48,7 @@ const ElegantGallery = () => {
       ref={mainContaierRef}
     >
       <div
-        className="absolute top-[32px] left-0 flex flex-col w-full "
+        className="absolute top-[32px] left-0 flex flex-col w-full"
         style={{
           height: `${(DATA_LENGTH / itemsByLine) * (cardCompH + GRID_GAP)}px`,
         }}
@@ -56,9 +56,10 @@ const ElegantGallery = () => {
         {/* Grid Container */}
         <motion.div
           style={{
-            marginTop: `${(cardCompH + GRID_GAP) * Math.max(sliceIndex - itemsByLine, 0)}px`,
+            position:'absolute',
+            top: `${(cardCompH + GRID_GAP) * Math.max(sliceIndex - BUFFER_SIZE, 0)}px`,
           }}
-          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[32px] mx-auto h-auto pb-10`}
+          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[32px] px-auto h-auto pb-10 grid-container`}
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -88,7 +89,7 @@ const GalleryCard: React.FC<{
     <motion.div
       // variants={cardVariants}
       whileHover={{ y: -8 }}
-      className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col h-full element is-visible"
+      className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col h-full element is-visible"
     >
       {/* Zone Image (Ant Design) */}
       <div className="relative h-64 bg-gray-100 overflow-hidden">

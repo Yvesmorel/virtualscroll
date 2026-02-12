@@ -23,6 +23,10 @@ export const useGridContainer = (gridContaineRef: React.RefObject<any>) => {
 
       setCardCompH(cardH);
       setItemsByLines(Math.floor(gridW / cardW));
+      console.log("elements par ligne",Math.floor(gridW / cardW));
+      console.log("hauteur",cardH);
+      
+      
     }
     
   }, [width]);
