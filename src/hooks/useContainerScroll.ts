@@ -16,12 +16,9 @@ export function useContainerScroll(
       const computeIndex = Math.floor(
         mainContainer.scrollTop / (cardCompH + GRID_GAP),
       );
-
-      console.log("POSITION_____",computeIndex,);
-      
       setSliceIndex(computeIndex);
     };
-     
+
     mainContainer.addEventListener("scroll", handleScroll);
     return () => mainContainer.removeEventListener("scroll", handleScroll);
   }, [cardCompH]);

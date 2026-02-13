@@ -7,9 +7,9 @@ import { ItemData } from "../deifinitions";
 import { useGridContainer } from "../hooks/useGridContainer";
 import { useContainerScroll } from "../hooks/useContainerScroll";
 import { useData } from "../hooks/useData";
-import { FACTOR, GRID_GAP } from "../utils";
+import { GRID_GAP } from "../utils";
 import { BUFFER_SIZE, DATA_LENGTH } from "../data";
-import useMainContainerItemSize, {
+import {
   useMainContainerContent,
 } from "../hooks/useMainContainerItemContent";
 
@@ -34,8 +34,11 @@ const cardVariants: any = {
 };
 
 const ElegantGallery = () => {
+
+  //je vais faire le typage apres j'ai annulé typscript avec any pour le moment
   const mainContaierRef = useRef<any>(undefined);
   const gridContaineRef = useRef<any>(undefined);
+  //----------------------------------
 
   const { cardCompH, itemsByLine } = useGridContainer(gridContaineRef);
   const { sliceIndex } = useContainerScroll(mainContaierRef, cardCompH);
@@ -51,12 +54,13 @@ const ElegantGallery = () => {
         className="absolute top-[32px] left-0 flex flex-col w-full"
         style={{
           height: `${(DATA_LENGTH / itemsByLine) * (cardCompH + GRID_GAP)}px`,
+          //(DATA_LENGTH / itemsByLine) * (cardCompH + GRID_GAP) pour caluler la hauteur totale du container de la grid donc du scroll
         }}
       >
         {/* Grid Container */}
         <motion.div
           style={{
-            position:'absolute',
+            position: 'absolute',
             top: `${(cardCompH + GRID_GAP) * Math.max(sliceIndex - BUFFER_SIZE, 0)}px`,
           }}
           className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[32px] px-auto h-auto pb-10 grid-container`}
@@ -77,7 +81,7 @@ const ElegantGallery = () => {
 // --- Sub-Component: Individual Card ---
 const GalleryCard: React.FC<{
   item: ItemData;
-}> = ({ item }) => {
+}> = memo(({ item }) => {
   // Formatage de la date
   const date = new Date(item.createdAt).toLocaleDateString("fr-FR", {
     day: "numeric",
@@ -87,7 +91,7 @@ const GalleryCard: React.FC<{
 
   return (
     <motion.div
-      // variants={cardVariants}
+      variants={cardVariants}
       whileHover={{ y: -8 }}
       className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col h-full element is-visible"
     >
@@ -154,6 +158,6 @@ const GalleryCard: React.FC<{
       </div>
     </motion.div>
   );
-};
+});
 
-export default memo(ElegantGallery);
+export default ElegantGallery;

@@ -17,6 +17,8 @@ export function useMainContainerContent(
 
     if (windowContent !== windowLines) setWindowLine(windowContent);
   }, [cardCompH]);
+
+  //le nombre de lignes que peut contenir la fenetre
   return { windowLines };
 }
 

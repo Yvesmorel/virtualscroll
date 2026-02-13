@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useWindowSize } from "./useWindowsSize";
 
 export const useGridContainer = (gridContaineRef: React.RefObject<any>) => {
-  
+
   const [cardCompH, setCardCompH] = useState(0);
   const [itemsByLine, setItemsByLines] = useState(0);
 
@@ -13,8 +13,10 @@ export const useGridContainer = (gridContaineRef: React.RefObject<any>) => {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    //si le parent n'a aucun enfant on sort
     if (gridContaineRef.current.hasChildNodes() === false) return;
 
+    //la hauteur du premier enfant de la grid
     const cardH = gridContaineRef.current.firstChild.clientHeight;
 
     if (cardH !== cardCompH) {
@@ -23,12 +25,9 @@ export const useGridContainer = (gridContaineRef: React.RefObject<any>) => {
 
       setCardCompH(cardH);
       setItemsByLines(Math.floor(gridW / cardW));
-      console.log("elements par ligne",Math.floor(gridW / cardW));
-      console.log("hauteur",cardH);
-      
-      
+
     }
-    
+
   }, [width]);
 
   return { cardCompH, cardRef, itemsByLine };
