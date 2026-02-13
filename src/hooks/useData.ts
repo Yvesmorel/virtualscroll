@@ -1,7 +1,6 @@
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useMemo, useState } from "react";
 
 import { BUFFER_SIZE, data, firstData } from "../data";
-
 
 const TOP_BUFFER_SIZE = BUFFER_SIZE;
 const BOTTOM_BUFFER_SIZE = BUFFER_SIZE;
@@ -15,22 +14,18 @@ export const useData = (
   itemsByLine: number,
   windowLines: number,
 ) => {
-  const [main, setMain] = useState(firstData);
-
-  useLayoutEffect(() => {
-    setMain(
+  const main = useMemo(
+    () =>
       data.slice(
-        Math.max(sliceIndex - TOP_BUFFER_SIZE, 0) * itemsByLine,
+        Math.max(sliceIndex - TOP_BUFFER_SIZE, 0) *  itemsByLine,
         Math.min(
           data.length,
           (windowLines + BOTTOM_BUFFER_SIZE) * itemsByLine +
-          sliceIndex * itemsByLine,
+            sliceIndex * itemsByLine,
         ),
       ),
-    );
-
-
-  }, [sliceIndex, itemsByLine, windowLines]);
+    [sliceIndex, itemsByLine, windowLines],
+  );
 
   return { main };
 };

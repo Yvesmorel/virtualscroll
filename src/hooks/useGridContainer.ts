@@ -2,9 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useWindowSize } from "./useWindowsSize";
 
 export const useGridContainer = (gridContaineRef: React.RefObject<any>) => {
-
   const [cardCompH, setCardCompH] = useState(0);
-  const [itemsByLine, setItemsByLines] = useState(0);
+  const [itemsByLine, setItemsByLines] = useState(1);
 
   const cardRef = useRef<any>(undefined);
 
@@ -25,9 +24,7 @@ export const useGridContainer = (gridContaineRef: React.RefObject<any>) => {
 
       setCardCompH(cardH);
       setItemsByLines(Math.floor(gridW / cardW));
-
     }
-
   }, [width]);
 
   return { cardCompH, cardRef, itemsByLine };

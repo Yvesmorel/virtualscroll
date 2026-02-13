@@ -47,11 +47,11 @@ const ElegantGallery = () => {
 
   return (
     <div
-      className="h-screen w-screnn bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 overflow-auto overflow-x-hidden relative "
+      className="h-screen w-screnn bg-black  px-4 sm:px-6 lg:px-8 overflow-auto overflow-x-hidden relative "
       ref={mainContaierRef}
     >
       <div
-        className="absolute top-[32px] left-0 flex flex-col w-full"
+        className="absolute  left-0 flex flex-col w-full"
         style={{
           height: `${(DATA_LENGTH / itemsByLine) * (cardCompH + GRID_GAP)}px`,
           //(DATA_LENGTH / itemsByLine) * (cardCompH + GRID_GAP) pour caluler la hauteur totale du container de la grid donc du scroll
@@ -63,7 +63,7 @@ const ElegantGallery = () => {
             position: 'absolute',
             top: `${(cardCompH + GRID_GAP) * Math.max(sliceIndex - BUFFER_SIZE, 0)}px`,
           }}
-          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[32px] px-auto h-auto pb-10 grid-container`}
+          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[0px] px-auto h-auto grid-container`}
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -91,9 +91,9 @@ const GalleryCard: React.FC<{
 
   return (
     <motion.div
-      variants={cardVariants}
-      whileHover={{ y: -8 }}
-      className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col h-full element is-visible"
+      // variants={cardVariants}
+      // whileHover={{ y: -8 }}
+      className="group bg-white  overflow-hidden shadow-md  transition-all duration-300  flex flex-col h-full element "
     >
       {/* Zone Image (Ant Design) */}
       <div className="relative h-64 bg-gray-100 overflow-hidden">
@@ -129,33 +129,7 @@ const GalleryCard: React.FC<{
       </div>
 
       {/* Zone Contenu (Tailwind) */}
-      <div className="p-6 flex flex-col flex-grow">
-        <div className="flex items-center gap-2 mb-3">
-          <User size={14} className="text-indigo-500" />
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-            {item.uuid.split("-")[1]}
-          </span>
-        </div>
-
-        {/* <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-indigo-600 transition-colors">
-          {item.title}
-        </h3> */}
-
-        <p className="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
-          {item.description}
-        </p>
-
-        {/* Footer de la carte */}
-        <div className="pt-4 border-t border-gray-50 flex items-center justify-between">
-          <div className="flex items-center text-gray-400 text-xs">
-            <Calendar size={14} className="mr-1.5" />
-            {date}
-          </div>
-          <button className="text-indigo-600 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-2 group-hover:translate-x-0">
-            Voir détails &rarr;
-          </button>
-        </div>
-      </div>
+  
     </motion.div>
   );
 });
